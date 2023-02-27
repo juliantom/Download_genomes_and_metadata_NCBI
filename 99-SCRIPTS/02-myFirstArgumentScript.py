@@ -12,4 +12,4 @@ def is_tool(name):
 
     return which(name) is not None
 
-which(wget)
+which(wget) 
