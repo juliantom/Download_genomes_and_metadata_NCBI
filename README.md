@@ -17,5 +17,5 @@ cd Download_genomes_and_metadata_NCBI
 ### Structure of program
 ```bash
 1. a
-2. 4
+2. 4d
 ```
