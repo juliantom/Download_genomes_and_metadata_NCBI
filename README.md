@@ -1,7 +1,6 @@
 # Download genomes and metadata from NCBI (BETA)
-This program will search and download genomic data for specific taxa using NCBI program \'datasets\'.<br>
-**Warning!** Some scripts are under construction and might not reflect the final vesion. <br>
-- Use on your own risk.<br>
+This program will search and download genomic data for specific taxa using NCBI program \'datasets\'[https://github.com/ncbi/datasets].<br>
+**Warning!** Some scripts are under construction and might not reflect the final vesion. *Use on your own risk*.<br>
 1. Dowload genomes.
 2. Download metadata.
 
