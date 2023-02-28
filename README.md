@@ -11,7 +11,7 @@ git clone https://github.com/juliantom/Download_genomes_and_metadata_NCBI.git
 # Change to repository
 cd Download_genomes_and_metadata_NCBI
 ```
-Check installation
+2. 1. Check installation
 ```bash
 # make programs executable and copy to bin
 chmod +x 99-SCRIPTS/*.py
