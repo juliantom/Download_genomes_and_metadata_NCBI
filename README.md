@@ -1,14 +1,11 @@
 # Download genomes and metadata from NCBI (BETA)
-This program will search and download genomic data for specific taxa using NCBI program \'datasets\'[https://github.com/ncbi/datasets].<br>
+This program will search and download taxon-specific genomic data and metadata. It employes **python scripts** and NCBI program **datasets** [https://github.com/ncbi/datasets].<br>
 **Warning!** Some scripts are under construction and might not reflect the final vesion. *Use on your own risk*.<br>
-1. Dowload genomes.
-2. Download metadata.
-
-### Quick start
+### Quick start (for those in a hurry!)
 1. Obtaining necessary files 
 ```bash
 # Change a desired folder
-cd $HOME/Desktop/Active_projects
+cd $HOME/my/desired/directory
 # Clone repository
 git clone https://github.com/juliantom/Download_genomes_and_metadata_NCBI.git
 # Change to repository
