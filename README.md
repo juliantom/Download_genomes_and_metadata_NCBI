@@ -15,8 +15,10 @@ cd Download_genomes_and_metadata_NCBI
 ```bash
 # make programs executable and copy to bin
 chmod +x 99-SCRIPTS/*.py
+# Create bin folder
+mkdir bin
 # copy programs to bin
-cp 99-SCRIPTS/01-check_programs_in_path.py bin/jtm-01-check_programs_in_path
+cp 99-SCRIPTS/01-check_programs_in_path.py bin/jtm-01-check_programs_in_path.py
 # make bin executable
 export PATH="$PWD/bin:$PATH"
 ```
