@@ -18,8 +18,8 @@ chmod +x 99-SCRIPTS/*.py
 # Create bin folder
 mkdir bin
 # copy programs to bin
-cp 99-SCRIPTS/01-check_programs_in_path.py bin/jt-check_programs_in_path
-cp 99-SCRIPTS/101-s-download_ncbi_genomes.sh bin/jt-workflow_check_and_download
+cp 99-SCRIPTS/01-check_programs_in_path.py bin/jtm-check_programs_in_path
+cp 99-SCRIPTS/101-s-download_ncbi_genomes.sh bin/jtm-workflow_check_and_download
 # make bin executable
 export PATH="$PWD/bin:$PATH"
 ```
