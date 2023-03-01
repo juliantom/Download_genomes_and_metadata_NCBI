@@ -1,24 +1,14 @@
 #!/bin/bash
 
-# Check if program exists or is in PATH
-if ! datasets --version &> /dev/null
-then
-    echo "--------------------------------------------"
-    echo "ERROR! NCBI datasets/dataformat missing not found."
-    echo "  Check installation:"
-    echo "      - Set PATH correctly in ~/.bashrc or ~/.bash_profile"
-    echo "        or"
-    echo "      - Install 'conda install -c conda-forge ncbi-datasets-cli' (https://github.com/ncbi/datasets)"
-    echo "--------------------------------------------"
-    exit
-else
-    echo ""
-    echo "Checking for program..."
-    echo "--------------------------------------------"
-    echo "1) NCBI datasets/dataformat found."
-    echo ""
-fi
+echo "############################################################"
+echo "#           WORKFLOW Check & download taxon data           #"
+echo "#                        Running...                        #"
+echo "#             1) Checks program availability               #"
+echo "#             2) Checks input/output arguments             #"
+echo "#             3) Downloads taxon-specific data             #"
+echo "############################################################"
 
+# Input arguments
 # Taxon of interest
 taxonOfInterest=$1
 # Can be 'RefSeq' ,'GenBank' or 'all'
@@ -26,8 +16,27 @@ dbSource=$2
 # Output file name
 outputFileName=$3
 
-echo ""
-echo "Submitted info..."
+# Check if program exists or is in PATH
+if ! datasets --version &> /dev/null
+then
+    echo "--------------------------------------------"
+    echo "ERROR! NCBI datasets/dataformat missing not found."
+    echo "  Check installation:"
+    echo "      - Set PATH correctly in ~/.bashrc or ~/.zshrc"
+    echo "        or"
+    echo "      - Install 'conda install -c conda-forge ncbi-datasets-cli' (https://github.com/ncbi/datasets)"
+    echo "--------------------------------------------"
+    exit
+else
+    echo ""
+    echo "Checking for program(s)..."
+    echo "--------------------------------------------"
+    echo "1) NCBI datasets/dataformat found."
+    echo ""
+fi
+
+# Printing passed arguments if NCBI datasets is available.
+echo "Submitted arguments..."
 echo "--------------------------------------------"
 echo "1) Taxon:\"$taxonOfInterest\""
 echo "2) Database source:\"$dbSource\""
@@ -76,7 +85,7 @@ fi
 # 
 pathWorkDir=$( dirname $PWD)
 dir_main=$( basename "$PWD" )
-summaryFields=${pathWorkDir}/${dir_main}/99-Scripts/111-t-genomesSummaryFields.txt
+summaryFields=${pathWorkDir}/${dir_main}/misc_data/genomic_metadata_fields.txt
 
 # Check if output filename is supplied with path
 if [ -z "$outputFileName" ]
@@ -114,7 +123,7 @@ then
         echo "     -In order for you to continue, the program will recreate the predefined DIRECTORY: \"$outDir\""
         echo "3.2) Everything looks great! FILENAME accepted: YES - \"$outName\"(.txt, .json, .fasta)"
         echo "      -Kudos!"
-        mkdir $outDir
+        #mkdir $outDir
     fi
 else
     outDir=$( dirname $outputFileName )
@@ -147,7 +156,7 @@ else
             echo "3.1) You are asking the program to create a new directory outDir=\"$outDir\""
             echo "    -You're that kind of person that likes to have everything under control."
             echo "    -DIRECTORY created!"
-            mkdir -p $outDir
+            #mkdir -p $outDir
             echo "3.2) Everything looks great! FILENAME accepted: YES - \"$outName\"(.txt, .json, .fasta)"
             echo "    -Kudos!"
         fi
@@ -164,9 +173,9 @@ echo ""
 echo -e "Extracting metadata for \"$taxonOfInterest\" from \"$dbSource\"."
 echo "--------------------------------------------"
 # Download metadata for specific taxon in JSON format (one line per genome)
-datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines > ${outDir}/${outName}.json
+#datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines > ${outDir}/${outName}.json
 # Download metadata for specific taxon in TSV format (one line per genome)
-datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines | dataformat tsv genome --fields ${myFields} > ${outDir}/${outName}.txt
+#datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines | dataformat tsv genome --fields ${myFields} > ${outDir}/${outName}.txt
 echo ""
 echo -e "Storing in \"${outDir}/${outName}\"(.txt, .json)"
 echo "--------------------------------------------"
