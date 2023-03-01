@@ -183,7 +183,7 @@ datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --ass
 datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines | dataformat tsv genome --fields ${myFields} > ${outDir}/$fileTxt
 # Download metadata for specific taxon in TSV format (one line per genome)
 #datasets download genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --include genome > ${outDir}/${outName}-genomic
-cat ${outDir}/$fileTxt | awk 'BEGIN{FS=OFS="\t"}NR>1{print $4}' | sed -e 's/GCF/GCA/' > ${outDir}/$fileAssembly
+cat ${outDir}/$fileTxt | awk 'BEGIN{FS=OFS="\t"}NR>1{print $4}' | sed -e 's/GCF/GCA/' | sort -u > ${outDir}/$fileAssembly
 cd ${outDir}
 datasets download genome accession --inputfile "$fileAssembly" --api-key ${NCBI_API_KEY} --assembly-source GenBank --include genome
 unzip ncbi_dataset.zip
