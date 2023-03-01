@@ -92,7 +92,7 @@ if [ -z "$outputFileName" ]
 then
     myDate=$( date '+%Y_%m_%d' )
     outName=${taxonOfInterest}-${dbSource}-${myDate}
-    outDir=${pathWorkDir}/${dir_main}/01-TEST
+    outDir=${pathWorkDir}/${dir_main}/test
     echo "3) Output (DIRECTORY / FILENAME): NO/NO - \"$outputFileName\""
     echo "    -This is not ideal, but you've come so far to be stopped by such a trival issue."
     echo "    -The program will find or create a DIRECTORY and FILENAME for you."
@@ -123,7 +123,7 @@ then
         echo "     -In order for you to continue, the program will recreate the predefined DIRECTORY: \"$outDir\""
         echo "3.2) Everything looks great! FILENAME accepted: YES - \"$outName\"(.txt, .json, .fasta)"
         echo "      -Kudos!"
-        #mkdir $outDir
+        mkdir $outDir
     fi
 else
     outDir=$( dirname $outputFileName )
@@ -156,7 +156,7 @@ else
             echo "3.1) You are asking the program to create a new directory outDir=\"$outDir\""
             echo "    -You're that kind of person that likes to have everything under control."
             echo "    -DIRECTORY created!"
-            #mkdir -p $outDir
+            mkdir -p $outDir
             echo "3.2) Everything looks great! FILENAME accepted: YES - \"$outName\"(.txt, .json, .fasta)"
             echo "    -Kudos!"
         fi
@@ -165,19 +165,33 @@ fi
 
 # Create a vertical list of metadata traits wanted in the final output TSV file (example shown in genomesSummaryFields.txt)
 # Store the list of traits in an array (horizontal)
-readarray -t myFieldsArray < $summaryFields
+#readarray -t myFieldsArray < $summaryFields
 # Transform the array into a comma-separated list (horizontal)
-myFields=$( echo ${myFieldsArray[@]} | sed -e 's/ /,/g' )
+#myFields=$( echo ${myFieldsArray[@]} | sed -e 's/ /,/g' )
+myFields=$(cat misc_data/fields-genomic_metadata.txt | xargs | sed -e 's/ /,/g')
 
 echo ""
-echo -e "Extracting metadata for \"$taxonOfInterest\" from \"$dbSource\"."
+echo -e "Downloading genomes and metadata for \"$taxonOfInterest\" from \"$dbSource\"."
 echo "--------------------------------------------"
+fileJson=01-${outName}.json
+fileTxt=02-${outName}.txt
+fileAssembly=03-${outName}-assembly_list.txt
+dirGenomes=04-${outName}-genomes
 # Download metadata for specific taxon in JSON format (one line per genome)
-#datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines > ${outDir}/${outName}.json
+datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines > ${outDir}/$fileJson
 # Download metadata for specific taxon in TSV format (one line per genome)
-#datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines | dataformat tsv genome --fields ${myFields} > ${outDir}/${outName}.txt
+datasets summary genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --as-json-lines | dataformat tsv genome --fields ${myFields} > ${outDir}/$fileTxt
+# Download metadata for specific taxon in TSV format (one line per genome)
+#datasets download genome taxon "$taxonOfInterest" --api-key ${NCBI_API_KEY} --assembly-source ${dbSource} --include genome > ${outDir}/${outName}-genomic
+cat ${outDir}/$fileTxt | awk 'BEGIN{FS=OFS="\t"}NR>1{print $4}' | sed -e 's/GCF/GCA/' > ${outDir}/$fileAssembly
+cd ${outDir}
+datasets download genome accession --inputfile "$fileAssembly" --api-key ${NCBI_API_KEY} --assembly-source GenBank --include genome
+unzip ncbi_dataset.zip
+mv ncbi_dataset $dirGenomes
+rm -r README.md ncbi_dataset.zip
+cd ..
 echo ""
-echo -e "Storing in \"${outDir}/${outName}\"(.txt, .json)"
+echo -e "Data stored in \"${outDir}/${outName}\"(.json, .txt, .fna)"
 echo "--------------------------------------------"
 echo ""
 echo "DONE"
